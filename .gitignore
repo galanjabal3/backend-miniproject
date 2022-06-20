@@ -1,3 +1,7 @@
 # abaikan semua file didalam folder :
-config/
 __pycache__/
+*.py[cod]
+*$py.class
+
+config/config.py
+config/__init__.py
