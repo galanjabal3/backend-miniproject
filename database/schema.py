@@ -39,7 +39,7 @@ class FlywaySchemaHistoryDB(db2.Entity):
         return item
     
 class MateriDB(db2.Entity):
-    _table = 'materi'
+    _table_ = 'materi'
     id = PrimaryKey(int, auto=True)
     school_id = Optional(int, nullable=True)
     description = Optional(str, 1000, nullable=True)

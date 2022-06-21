@@ -47,4 +47,29 @@ class User:
             'role' : self.role,
             'create_date' : str(self.create_date),
             'update_date' : str(self.update_date)
-        }        
+        }   
+
+    def to_response_login(self):
+        return {
+            'id' : self.id,
+            'username' : self.username,
+            'email' : self.email,
+            'avatar' : self.avatar,
+            'school_id' : self.school_id,
+            'device' : self.device, 
+            'blocked' : self.blocked,
+            'guest' : self.guest,
+            'token': self.token,
+            'role' : self.role,
+        }    
+    
+    def to_response_profile(self):
+        return {
+            'id' : self.id,
+            'username' : self.username,
+            'email' : self.email,
+            'avatar' : self.avatar,
+            'role' : self.role,
+            'create_date' : str(self.create_date),
+            'update_date' : str(self.update_date)
+        }    
