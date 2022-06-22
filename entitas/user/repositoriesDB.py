@@ -69,6 +69,12 @@ def find_by_id(id=None, to_model=False):
 def update(json_object={},to_model=False):
     if json_object is None:
         return None
+    if json_object['guest'] not in json_object:
+        json_object['guest'] = 0
+    if json_object['blocked'] not in json_object:
+        json_object['blocked'] = 0
+    if json_object['device'] not in json_object:
+        json_object['device'] = ''
     try:
         update_user = UserDB[json_object['id']]
         update_user.username = json_object['username']
@@ -89,13 +95,23 @@ def update(json_object={},to_model=False):
     
 @db_session
 def insert(json_object={}, to_model=False):
+    if 'guest' not in json_object:
+        json_object['guest'] = False
+    if 'blocked' not in json_object:
+        json_object['blocked'] = False
+    if 'device' not in json_object:
+        json_object['device'] = ''
     try:
         new_user = UserDB(
             username = json_object['username'],
             password = encrypt_string(json_object['password']),
+            avatar = json_object['avatar'],
             email = json_object['email'],
             school_id = json_object['school_id'],
             role = json_object['role'],
+            guest = json_object['guest'],
+            device = json_object['device'],
+            blocked = json_object['blocked'],
             token = str(uuid.uuid4())
         )
         commit()

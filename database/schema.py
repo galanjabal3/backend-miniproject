@@ -1,3 +1,4 @@
+import json
 from pony.orm import *
 from util.db_util import db2
 from entitas.flyway_schema_history.models import FlywaySchemaHistory
@@ -223,6 +224,7 @@ class UserTrafficDB(db2.Entity):
     visitors = Optional(int, nullable=True)
     user_id = Optional(int, nullable=True)
     school_id = Optional(int, nullable=True)
+    users = Optional(str, 1000, nullable=True)
     create_date = Optional(datetime, nullable=True)
     update_date = Optional(datetime, nullable=True)
     
@@ -232,6 +234,7 @@ class UserTrafficDB(db2.Entity):
         item.visitors = self.visitors
         item.user_id = self.user_id
         item.school_id = self.school_id
+        item.users = json.loads(self.users),
         item.create_date = self.create_date
         item.update_date = self.update_date
         return item

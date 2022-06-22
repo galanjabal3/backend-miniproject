@@ -85,6 +85,7 @@ class UserSignupResource:
     def on_post(self, req, resp):
         base_response = BaseResponse()
         body = req.media
+        body['role'] = 'ADMIN'
         base_response.data = services.signup_user_db(json_object=body)
         if base_response.data['token'] == '':
             base_response.status = falcon.HTTP_403
@@ -115,5 +116,21 @@ class UserGuestListResource:
         base_response.status = falcon.HTTP_200
         base_response.code = 200
         base_response.message = 'success'
+        resp.media = base_response.toJSON()
+        resp.status = base_response.status
+        
+class UserSignupAdminSchoolResource:
+    auth = {
+        'auth_disabled': True
+    }
+    def on_post(self, req, resp, id: int):
+        base_response = BaseResponse()
+        body = req.media
+        body['school_id'] = int(id)
+        base_response.data = services.signup_user_admin_school_by_school_id_db(json_object=body)
+        base_response.status = falcon.HTTP_200
+        base_response.code = 200
+        base_response.message = 'success'
+
         resp.media = base_response.toJSON()
         resp.status = base_response.status

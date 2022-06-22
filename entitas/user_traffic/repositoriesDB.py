@@ -1,17 +1,18 @@
-from database.schema import SchoolDB
+import json
+from database.schema import UserTrafficDB
 from pony.orm import *
 
 @db_session
 def get_all(to_model=False):
     result = []
     try:
-        for item in select(s for s in SchoolDB):
+        for item in select(s for s in UserTrafficDB):
             if to_model:
                 result.append(item.to_model())
             else:
                 result.append(item.to_model().to_response())
     except Exception as e:
-        print('error SchoolDB get_all: ', e)
+        print('error UserTrafficDB get_all: ', e)
     return result
 
 @db_session   
@@ -19,16 +20,12 @@ def get_all_with_pagination(page=1,limit=9,filters=[],to_model=False):
     result = []
     total_record = 0
     try:
-        data_in_db = select(s for s in SchoolDB)
+        data_in_db = select(s for s in UserTrafficDB)
         for item in filters:
             if item['field'] == 'id':
                 data_in_db = data_in_db.filter(id=item['value'])
-            elif item['field'] == 'name':
-                data_in_db = data_in_db.filter(lambda d: item['value'] in d.name)
-            elif item['field'] == 'head_master':
-                data_in_db = data_in_db.filter(head_master=item['value'])
 
-        data_in_db.order_by(desc(SchoolDB.id))
+        data_in_db.order_by(desc(UserTrafficDB.id))
         total_record = data_in_db.count()
         if limit >0:
             data_in_db = data_in_db.page(pagenum=page, pagesize=limit)
@@ -41,13 +38,13 @@ def get_all_with_pagination(page=1,limit=9,filters=[],to_model=False):
                 result.append(item.to_model().to_response())
 
     except Exception as e:
-        print('error SchoolDB getAllWithPagination: ', e)
+        print('error UserTrafficDB getAllWithPagination: ', e)
     return result, {'total': total_record, 'page': page, 'total_page': (total_record + limit - 1)//limit if limit >0 else 1}
 
 @db_session
 def find_by_id(id=None, to_model=False):
     try:
-        data_in_db = select(s for s in SchoolDB if s.id == id)
+        data_in_db = select(s for s in UserTrafficDB if s.id == id)
         if data_in_db.count() == 0:
             return None
         if to_model:
@@ -56,53 +53,51 @@ def find_by_id(id=None, to_model=False):
             return data_in_db.first().to_model().to_response()
     
     except Exception as e:
-        print('error findById SchoolDB: ', e)
+        print('error findById UserTrafficDB: ', e)
         return None
 
 @db_session
 def update(json_object={},to_model=False):
     try:
-        update_school = SchoolDB[json_object['id']]
-        update_school.head_master = json_object['head_master']
-        update_school.name = json_object['name']
-        update_school.phone_number = json_object['phone_number']
-        update_school.address = json_object['address']
-        update_school.update_by = json_object['update_by']
+        update_user_traffic = UserTrafficDB[json_object['id']]
+        update_user_traffic.visitors = json_object['visitors']
+        update_user_traffic.user_id = json_object['user_id']
+        update_user_traffic.school_id = json_object['school_id']
         commit()
         if to_model:
-            update_school.to_model()
+            update_user_traffic.to_model()
         else:
-            return update_school.to_model().to_response()
+            return update_user_traffic.to_model().to_response()
     
     except Exception as e:
-        print('error update SchoolDB: ', e)
+        print('error update UserTrafficDB: ', e)
         return None
     
 @db_session
 def insert(json_object={}, to_model=False):
     try:
-        new_school = SchoolDB(
-            head_master = json_object['head_master'],
-            name = json_object['name'],
-            phone_number = json_object['phone_number'],
-            address = json_object['address']
+        new_user_traffic = UserTrafficDB(
+            visitors = json_object['visitors'],
+            user_id = json_object['user_id'],
+            school_id = json_object['school_id'],
+            users = json.dumps(json_object['users'])
         )
         commit()
         if to_model:
-            return new_school.to_model()
+            return new_user_traffic.to_model()
         else:
-            return new_school.to_model().to_response()
+            return new_user_traffic.to_model().to_response()
     
     except Exception as e:
-        print('error insert SchoolDB: ', e)
+        print('error insert UserTrafficDB: ', e)
         return None
 
 @db_session
 def delete_by_id(id=None):
     try:
-        SchoolDB[id].delete()
+        UserTrafficDB[id].delete()
         commit()
         return True
     except Exception as e:
-        print('error deleteById SchoolDB: ', e)
+        print('error deleteById UserTrafficDB: ', e)
     return

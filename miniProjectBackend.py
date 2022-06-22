@@ -5,6 +5,7 @@ from util.jwt_util import portprq_auth
 from entitas.echo.resources import *
 from entitas.school.resources import *
 from entitas.user.resources import *
+from entitas.user_traffic.rsources import *
 from falcon_swagger_ui import register_swaggerui_app
 from util.db_util import db2
 import os
@@ -30,13 +31,28 @@ api.req_options.auto_parse_form_urlencoded = True
 
 print('Mini Project Backend Running...')
 api.add_route('/api/echo', EchoResource())
+# login
 api.add_route('/api/login', UserLoginResource())
+# signup admin
 api.add_route('/api/signup', UserSignupResource())
+# Get dan Put User profile
 api.add_route('/api/user/profile', UserProfileResource())
+# Get All User
 api.add_route('/api/admin/user', UserAdminResource())
+# Get Guest = True
 api.add_route('/api/admin/guest/list', UserGuestListResource())
+# CRUD School
 api.add_route('/api/admin/school', SchoolResource())
 api.add_route('/api/admin/school/{id}', SchoolWithIdResource())
+# school-registration
+api.add_route('/api/school/registration', SchoolResource())
+api.add_route('/api/school/registration/{id}', SchoolRegistrationUpdateResource())
+api.add_route('/api/school/registration/list', SchoolListResource())
+api.add_route('/api/school/registration/search', SchoolListResource())
+# signup-user-admin-school
+api.add_route('/api/signup_admin_school/{id}', UserSignupAdminSchoolResource())
+# traffic
+api.add_route('/api/traffic_global_user/connect', TrafficGlobalUserConnect())
 
 SWAGGERUI_URL = "/docs"
 SCHEMA_URL = "/static/openapi.yaml"
