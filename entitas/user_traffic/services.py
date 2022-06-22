@@ -28,12 +28,14 @@ def get_traffic_global_user(json_object={}):
     import socket
     device = socket.gethostname()
     visitors = repositoriesDB.get_all(to_model=True)
+    roles = []
+    roles.append("USER")
     user = insert(json_object={
         'username': 'guest_' + get_random_string(6),
         'password': '',
         'avatar': '',
         'email': '',
-        'role': 'USER',
+        'roles': roles,
         'guest': True,
         'school_id': 0,
         'blocked': False,

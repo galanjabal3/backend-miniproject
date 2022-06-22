@@ -1,6 +1,6 @@
 
 class User:
-    def __init__(self, id=0, username='', password='', email='', avatar='', school_id=0, device='', blocked=False, guest=False, token='', role='', create_date=None, update_date=None):
+    def __init__(self, id=0, username='', password='', email='', avatar='', school_id=0, device='', blocked=False, guest=False, token='', roles=[], create_date=None, update_date=None):
         self.id = id
         self.username = username
         self.password = password
@@ -11,7 +11,7 @@ class User:
         self.blocked = blocked
         self.guest = guest
         self.token = token
-        self.role = role
+        self.roles = roles
         self.create_date = create_date
         self.update_date = update_date
     
@@ -27,7 +27,7 @@ class User:
             'blocked' : self.blocked,
             'guest' : self.guest,
             'token': self.token,
-            'role' : self.role,
+            'roles' : self.roles,
             'create_date' : str(self.create_date),
             'update_date' : str(self.update_date)
         }
@@ -44,7 +44,7 @@ class User:
             'blocked' : self.blocked,
             'guest' : self.guest,
             'token': self.token,
-            'role' : self.role,
+            'roles' : self.roles,
             'create_date' : str(self.create_date),
             'update_date' : str(self.update_date)
         }   
@@ -60,7 +60,7 @@ class User:
             'blocked' : self.blocked,
             'guest' : self.guest,
             'token': self.token,
-            'role' : self.role,
+            'roles' : self.roles,
         }    
     
     def to_response_profile(self):
@@ -69,7 +69,7 @@ class User:
             'username' : self.username,
             'email' : self.email,
             'avatar' : self.avatar,
-            'role' : self.role,
+            'roles' : self.roles,
             'create_date' : str(self.create_date),
             'update_date' : str(self.update_date)
         }    

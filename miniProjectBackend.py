@@ -5,7 +5,7 @@ from util.jwt_util import portprq_auth
 from entitas.echo.resources import *
 from entitas.school.resources import *
 from entitas.user.resources import *
-from entitas.user_traffic.rsources import *
+from entitas.user_traffic.resources import *
 from falcon_swagger_ui import register_swaggerui_app
 from util.db_util import db2
 import os

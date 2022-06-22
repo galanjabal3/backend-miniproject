@@ -145,7 +145,7 @@ class UserDB(db2.Entity):
     guest = Optional(bool, nullable=True)
     school_id = Optional(int, nullable=True)
     token = Optional(str, nullable=True)
-    role = Optional(str, nullable=True)
+    roles = Optional(str,1000, nullable=True)
     create_date = Optional(datetime, nullable=True)
     update_date = Optional(datetime, nullable=True)
     
@@ -161,7 +161,7 @@ class UserDB(db2.Entity):
         item.blocked = self.blocked
         item.guest = self.guest
         item.token = self.token
-        item.role = self.role
+        item.roles = json.loads(self.roles.replace("'",'"'))
         item.create_date = self.create_date
         item.update_date = self.update_date
         return item

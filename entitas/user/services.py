@@ -1,5 +1,7 @@
 from entitas.user import repositoriesDB
 from util.other_util import raise_error
+import socket
+import uuid
 
 def find_user_db_by_id(id=0,to_model=False):
     return repositoriesDB.find_by_id(id=id, to_model=to_model)
@@ -45,49 +47,25 @@ def login_user(json_object={}):
 def signup_user_db(json_object={}):
     from util.constant import EMAIL_MUST_FILL
     from util.jwt_util import jwt_encode, check_valid_email
-    import uuid
-    if 'email' not in json_object:
-        return {'token': '', 'message': EMAIL_MUST_FILL }
-    
-    if 'school_id' not in json_object:
-        json_object['school_id'] = 0
-    if json_object['avatar'] not in json_object:
-        json_object['avatar'] = ''
-    json_object['token'] = str(uuid.uuid4())
-    if not check_valid_email(email=json_object['email']):
-        return {'token': '', 'message': 'Email tidak valid'}
-    email = repositoriesDB.find_by_email(email=json_object['email'], to_model=True)
-    
-    if email is None:
-        account_info = repositoriesDB.insert(json_object=json_object, to_model=True)
-        return jwt_encode(account_info.to_response_login())
-    else:
-        return {'token': '', 'message': 'Email sudah dipakai'}
-    
-def signup_user_admin_school_by_school_id_db(json_object={}):
-    from util.constant import EMAIL_MUST_FILL
-    from util.jwt_util import jwt_encode, check_valid_email
     from entitas.school.services import find_school_db_by_id
-    import socket
-    import uuid
     if 'email' not in json_object:
         return {'token': '', 'message': EMAIL_MUST_FILL }
     
-    school = find_school_db_by_id(id=json_object['school_id'], to_model=True)
-    if school is None:
-        raise_error(msg='School Id not found')
-    if json_object['avatar'] not in json_object:
-        json_object['avatar'] = ''
-    json_object['role'] = 'ADMIN_SCHOOL'
+    if 'school_id' in json_object:
+        school = find_school_db_by_id(id=json_object['school_id'], to_model=True)
+        if school is None:
+            raise_error(msg='School Id not found')
+    roles = []
+    roles.append(json_object['roles'])
     json_object['token'] = str(uuid.uuid4())
     json_object['device'] = socket.gethostname()
+    json_object['roles'] = roles
     if not check_valid_email(email=json_object['email']):
-        return {'token': '', 'message': 'Email tidak valid'}
+        raise_error(msg='Email tidak valid')
     email = repositoriesDB.find_by_email(email=json_object['email'], to_model=True)
     
     if email is None:
         account_info = repositoriesDB.insert(json_object=json_object, to_model=True)
         return jwt_encode(account_info.to_response_login())
     else:
-        return {'token': '', 'message': 'Email sudah dipakai'}
-    
+        raise_error(msg='Email sudah di pakai')

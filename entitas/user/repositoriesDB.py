@@ -95,12 +95,16 @@ def update(json_object={},to_model=False):
     
 @db_session
 def insert(json_object={}, to_model=False):
+    if 'school_id' not in json_object:
+        json_object['school_id'] = 0
     if 'guest' not in json_object:
         json_object['guest'] = False
     if 'blocked' not in json_object:
         json_object['blocked'] = False
     if 'device' not in json_object:
         json_object['device'] = ''
+    if 'avatar' not in json_object:
+        json_object['avatar'] = ''
     try:
         new_user = UserDB(
             username = json_object['username'],
@@ -108,7 +112,7 @@ def insert(json_object={}, to_model=False):
             avatar = json_object['avatar'],
             email = json_object['email'],
             school_id = json_object['school_id'],
-            role = json_object['role'],
+            roles = str(json_object['roles']),
             guest = json_object['guest'],
             device = json_object['device'],
             blocked = json_object['blocked'],
