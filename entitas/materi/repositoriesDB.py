@@ -1,3 +1,4 @@
+import json
 from database.schema import MateriDB
 from pony.orm import *
 
@@ -66,6 +67,7 @@ def update(json_object={},to_model=False):
         update_materi.teacher = json_object['teacher']
         update_materi.materi = json_object['materi']
         update_materi.school_id = json_object['school_id']
+        update_materi.question = json.dumps(json_object['question'])
         commit()
         if to_model:
             update_materi.to_model()
@@ -84,7 +86,8 @@ def insert(json_object={}, to_model=False):
             question_total = json_object['question_total'],
             teacher = json_object['teacher'],
             materi = json_object['materi'],
-            school_id = json_object['school_id']
+            school_id = json_object['school_id'],
+            question = json.dumps(json_object['question'])
         )
         commit()
         if to_model:

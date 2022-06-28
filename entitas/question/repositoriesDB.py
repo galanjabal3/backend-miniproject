@@ -1,3 +1,4 @@
+import json
 from database.schema import QuestionDB
 from pony.orm import *
 
@@ -66,7 +67,7 @@ def update(json_object={},to_model=False):
         update_question.image = json_object['image']
         update_question.question = json_object['question']
         update_question.answer_true = json_object['answer_true']
-        update_question.answer_list = json_object['answer_list']
+        update_question.answer_list = json.dumps(json_object['answer_list'])
         update_question.count_used = json_object['count_used']
         update_question.publish = json_object['publish'] 
         update_question.materi_id = json_object['materi_id']
@@ -83,12 +84,16 @@ def update(json_object={},to_model=False):
 
 @db_session
 def insert(json_object={}, to_model=False):
+    if 'count_used' not in json_object:
+        json_object['count_used'] = 0
+    if 'publish' not in json_object:
+        json_object['publish'] = True
     try:
         new_materi = QuestionDB(
             image = json_object['image'],
             question = json_object['question'],
             answer_true = json_object['answer_true'],
-            answer_list = json_object['answer_list'],
+            answer_list = json.dumps(json_object['answer_list']),
             count_used = json_object['count_used'],
             publish = json_object['publish'], 
             materi_id = json_object['materi_id'],
@@ -113,3 +118,21 @@ def delete_by_id(id=None):
     except Exception as e:
         print('error deleteById QuestionDB: ', e)
     return
+
+@db_session
+def update_from_materi(json_object={},to_model=False):
+    try:
+        update_question = QuestionDB[json_object['id']]
+        update_question.image = json_object['image']
+        update_question.question = json_object['question']
+        update_question.answer_true = json_object['answer_true']
+        update_question.answer_list = json.dumps(json_object['answer_list'])
+        commit()
+        if to_model:
+            update_question.to_model()
+        else:
+            return update_question.to_model().to_response()
+    
+    except Exception as e:
+        print('error update_from_materi QuestionDB: ', e)
+        return None

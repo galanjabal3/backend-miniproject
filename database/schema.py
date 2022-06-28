@@ -47,17 +47,19 @@ class MateriDB(db2.Entity):
     question_total = Optional(int, nullable=True)
     teacher = Optional(str, nullable=True)
     materi = Optional(str, nullable=True)
+    question = Optional(str, 1000, nullable=True)
     create_date = Optional(datetime, nullable=True)
     update_date = Optional(datetime, nullable=True)
     
     def to_model(self):
         item = Materi()
         item.id = self.id
+        item.school_id = self.school_id
         item.description = self.description
         item.question_total = self.question_total
         item.teacher = self.teacher
         item.materi = self.materi
-        item.school_id = self.school_id
+        item.question = json.loads(self.question)
         item.create_date = self.create_date
         item.update_date = self.update_date
         return item
@@ -82,7 +84,7 @@ class QuestionDB(db2.Entity):
         item.image = self.image
         item.question = self.question
         item.answer_true  = self.answer_true
-        item.answer_list = self.answer_list
+        item.answer_list = json.loads(self.answer_list)
         item.count_used = self.count_used
         item.publish = self.publish
         item.school_id = self.school_id

@@ -79,3 +79,34 @@ class QuestionWithIdResource:
             base_response.message = 'Data not found'
         resp.media = base_response.toJSON()
         resp.status = base_response.status
+        
+class QuestionMateriResource:
+    def on_get(self, req, resp, id: int, materi_id: int):
+        base_response = BaseResponse()
+        base_response.data = services.find_question_db_by_id(id=int(id), materi_id=int(materi_id))
+        if base_response.data is not None:
+            base_response.status = falcon.HTTP_200
+            base_response.code = 200
+            base_response.message = 'success'
+        else:
+            base_response.status = falcon.HTTP_404
+            base_response.code = 404
+            base_response.message = 'Data not found'
+        resp.media = base_response.toJSON()
+        resp.status = base_response.status
+
+class QuestionCheckAnswerResource:
+    def on_post(self, req, resp, id: int):
+        base_response = BaseResponse()
+        body = req.media
+        base_response.data = services.checking_question_answer(json_object=body, id=int(id))
+        if base_response.data is not None:
+            base_response.status = falcon.HTTP_200
+            base_response.code = 200
+            base_response.message = 'success'
+        else:
+            base_response.status = falcon.HTTP_404
+            base_response.code = 404
+            base_response.message = 'Data not found'
+        resp.media = base_response.toJSON()
+        resp.status = base_response.status

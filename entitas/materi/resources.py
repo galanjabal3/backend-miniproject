@@ -77,3 +77,62 @@ class MateriWithIdResource:
             base_response.message = 'Data not found'
         resp.media = base_response.toJSON()
         resp.status = base_response.status
+        
+class QuestionMateriAdminResource:
+    def on_post(self, req, resp, school_id: int):
+        base_response = BaseResponse()
+        body = req.media
+        base_response.data = services.create_question_from_materi(json_object=body, roles=req.context['user']['roles'], school_id=int(school_id))
+        base_response.status = falcon.HTTP_200
+        base_response.code = 200
+        base_response.message = 'success'
+        
+        resp.media = base_response.toJSON()
+        resp.status = base_response.status
+
+class QuestionMateriUpdateResource:
+    def on_put(self, req, resp, id: int):
+        base_response = BaseResponse()
+        body = req.media
+        body['id'] = int(id)
+        base_response.data = services.update_question_from_materi(json_object=body, roles=req.context['user']['roles'])
+        if base_response.data is not None:
+            base_response.status = falcon.HTTP_200
+            base_response.code = 200
+            base_response.message = 'success'
+        else:
+            base_response.status = falcon.HTTP_404
+            base_response.code = 404
+            base_response.message = 'Data not found'        
+        resp.media = base_response.toJSON()
+        resp.status = base_response.status
+    
+class QuestionMateriUserResource:
+    def on_get(self, req, resp, id: int):
+        base_response = BaseResponse()
+        base_response.data = services.find_question_materi_from_user(id=int(id))
+        if base_response.data is not None:
+            base_response.status = falcon.HTTP_200
+            base_response.code = 200
+            base_response.message = 'success'
+        else:
+            base_response.status = falcon.HTTP_404
+            base_response.code = 404
+            base_response.message = 'Data not found'
+        resp.media = base_response.toJSON()
+        resp.status = base_response.status
+        
+class GetQuestionMateriAdminResource:
+    def on_get(self, req, resp, id: int):
+        base_response = BaseResponse()
+        base_response.data = services.find_materi_db_by_id(id=int(id))
+        if base_response.data is not None:
+            base_response.status = falcon.HTTP_200
+            base_response.code = 200
+            base_response.message = 'success'
+        else:
+            base_response.status = falcon.HTTP_404
+            base_response.code = 404
+            base_response.message = 'Data not found'
+        resp.media = base_response.toJSON()
+        resp.status = base_response.status

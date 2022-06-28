@@ -1,6 +1,6 @@
 
 class Question:
-    def __init__(self, id=0, image='', question='', answer_true='', answer_list='', count_used=0, publish=False, school_id=0, materi_id=0, create_date=None, update_date=None):
+    def __init__(self, id=0, image='', question='', answer_true='', answer_list=[], count_used=0, publish=False, school_id=0, materi_id=0, create_date=None, update_date=None):
         self.id = id
         self.image = image
         self.question = question
