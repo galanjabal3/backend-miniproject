@@ -31,8 +31,9 @@ def delete_materi_by_id(id=0):
 def create_question_from_materi(json_object={}, roles='', school_id=None):
     from entitas.school.services import find_school_db_by_id
     from entitas.question.services import insert_question_db
-    if roles != 'ADMIN':
-        raise_error(msg='Kamu tidak admin')
+    for item in roles: 
+        if item != ('ADMIN' or 'ADMIN SCHOOL'):
+            raise_error(msg='Kamu tidak bisa membuat question')
     school = find_school_db_by_id(id=school_id, to_model=True)
     if school is None:
         raise_error(msg='School id tidak ditemukan')
@@ -88,3 +89,6 @@ def find_question_materi_from_user(id=0, to_model=False):
     if to_model:
         return materi
     return materi.to_response()
+
+def update_materi_question_by_id(json_object={}, to_model=False):
+    return repositoriesDB.update_materi_question_by_id(json_object=json_object, to_model=to_model)

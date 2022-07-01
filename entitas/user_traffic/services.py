@@ -1,4 +1,6 @@
+import uuid
 from entitas.user_traffic import repositoriesDB
+from util.jwt_util import jwt_encode
 from util.other_util import raise_error, get_random_string
 
 def find_user_traffic_db_by_id(id=0,to_model=False):
@@ -37,11 +39,12 @@ def get_traffic_global_user(json_object={}):
         'email': '',
         'roles': roles,
         'guest': True,
+        'token': str(uuid.uuid4),
         'school_id': 0,
         'blocked': False,
         'device': device
     }, to_model=True)
-    users = user.to_response_login()
+    users = jwt_encode(user.to_response_login())
     json_object['user_id'] = users['id']
     json_object['school_id'] = 0
     json_object['visitors'] = len(visitors) + 1

@@ -190,6 +190,8 @@ def update_profile_user(json_object={}, to_model=False):
             update_user.username = json_object['username'] 
         if 'avatar' in json_object:
             update_user.avatar = json_object['avatar']
+        if 'email' in json_object:
+            update_user.email = json_object['email']
         commit()
         if to_model:
             update_user.to_model()
@@ -197,4 +199,19 @@ def update_profile_user(json_object={}, to_model=False):
             return update_user.to_model().to_response_profile()
     except Exception as e:
         print('error update_profile_user: ', e)
+        return None
+    
+@db_session
+def update_user_school_id_by_id(id=0, school_id=0, to_model=False):
+    try:
+        update_school_id = UserDB[id]
+        update_school_id.school_id = school_id
+        update_school_id.guest = False
+        commit()
+        if to_model:
+            update_school_id.to_model()
+        else:
+            return update_school_id.to_model().to_response()
+    except Exception as e:
+        print('error update_user_school_id_by_id: ', e)
         return None

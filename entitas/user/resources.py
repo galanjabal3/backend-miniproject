@@ -135,3 +135,18 @@ class UserSignupAdminSchoolResource:
 
         resp.media = base_response.toJSON()
         resp.status = base_response.status
+
+class UpdateSchoolIdUserResource:
+    def on_put(self, req, resp, school_id: int):
+        base_response = BaseResponse()
+        base_response.data = services.update_school_id_user_by_user_id(id=req.context['user']['id'], school_id=int(school_id))
+        if base_response.data is not None:
+            base_response.status = falcon.HTTP_200
+            base_response.code = 200
+            base_response.message = 'success'
+        else:
+            base_response.status = falcon.HTTP_404
+            base_response.code = 404
+            base_response.message = 'Data not found'
+        resp.media = base_response.toJSON()
+        resp.status = base_response.status

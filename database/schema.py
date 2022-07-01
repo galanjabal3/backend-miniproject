@@ -177,6 +177,7 @@ class UserAnswerDB(db2.Entity):
     question_id = Optional(int, nullable=True)
     materi_id = Optional(int, nullable=True)
     school_id = Optional(int, nullable=True)
+    questions = Optional(str, 1000, nullable=True)
     create_date = Optional(datetime, nullable=True)
     update_date = Optional(datetime, nullable=True)
     
@@ -189,6 +190,7 @@ class UserAnswerDB(db2.Entity):
         item.school_id = self.school_id
         item.question_id = self.question_id
         item.materi_id = self.materi_id
+        item.questions = json.loads(self.questions)
         item.create_date = self.create_date
         item.update_date = self.update_date
         return item

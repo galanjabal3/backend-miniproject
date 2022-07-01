@@ -69,3 +69,13 @@ def signup_user_db(json_object={}):
         return jwt_encode(account_info.to_response_login())
     else:
         raise_error(msg='Email sudah di pakai')
+        
+def update_school_id_user_by_user_id(id=None, school_id=None, to_model=False):
+    from entitas.school.services import find_school_db_by_id
+    user = repositoriesDB.find_by_id(id=id, to_model=True)
+    if user is None:
+        raise_error(msg='User not found')
+    school = find_school_db_by_id(id=school_id)
+    if school is None:
+        raise_error(msg='School id not found')
+    return repositoriesDB.update_user_school_id_by_id(id=id, school_id=school_id, to_model=to_model)

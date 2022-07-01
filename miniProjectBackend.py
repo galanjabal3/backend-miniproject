@@ -8,6 +8,8 @@ from entitas.user.resources import *
 from entitas.user_traffic.resources import *
 from entitas.materi.resources import *
 from entitas.question.resources import *
+from entitas.user_answer.resources import *
+from entitas.user_score.resources import *
 from falcon_swagger_ui import register_swaggerui_app
 from util.db_util import db2
 import os
@@ -46,6 +48,8 @@ api.add_route('/api/admin/guest/list', UserGuestListResource())
 # CRUD School
 api.add_route('/api/admin/school', SchoolResource())
 api.add_route('/api/admin/school/{id}', SchoolWithIdResource())
+# update school id user
+api.add_route('/api/user/update_school/{school_id}', UpdateSchoolIdUserResource())
 # school-registration
 api.add_route('/api/school/registration', SchoolResource())
 api.add_route('/api/school/registration/{id}', SchoolRegistrationUpdateResource())
@@ -70,7 +74,9 @@ api.add_route('/api/question/materi/{id}/user', QuestionMateriUserResource())
 api.add_route('/api/question/materi/{id}/admin', GetQuestionMateriAdminResource())
 # post cek answer
 api.add_route('/api/question/{id}/answer', QuestionCheckAnswerResource())
-
+# get user_score
+api.add_route('/api/user_score', UserScoreByUserIdResource())
+api.add_route('/api/user_score/materi/{materi_id}', UserScoreByUserIdAndMateriIdResource())
 
 SWAGGERUI_URL = "/docs"
 SCHEMA_URL = "/static/openapi.yaml"

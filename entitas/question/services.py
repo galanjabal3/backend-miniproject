@@ -30,18 +30,8 @@ def insert_question_db(json_object={}):
 def delete_question_by_id(id=0):
     return repositoriesDB.delete_by_id(id=id)
 
-def checking_question_answer(id=0, json_object={}):
-    from util.constant import ANSWER_TRUE
-    question = repositoriesDB.find_by_id(id=id, to_model=True)
-    if question is None:
-        raise_error(msg='Question Id not found')
-    for item in question.answer_list:
-        if json_object['answer'] == item:
-            if json_object['answer'] == question.answer_true:
-                return ANSWER_TRUE
-            if json_object['answer'] != question.answer_true:
-                raise_error(msg='Not the same Answer')
-    return None
-
 def update_question_from_materi(json_object={}, to_model=False):
     return repositoriesDB.update_from_materi(json_object=json_object, to_model=to_model)
+
+def update_question_count_used_by_id(json_object={}, to_model=False):
+    return repositoriesDB.update_count_used_by_id(json_object=json_object, to_model=to_model)

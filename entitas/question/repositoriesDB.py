@@ -68,7 +68,6 @@ def update(json_object={},to_model=False):
         update_question.question = json_object['question']
         update_question.answer_true = json_object['answer_true']
         update_question.answer_list = json.dumps(json_object['answer_list'])
-        update_question.count_used = json_object['count_used']
         update_question.publish = json_object['publish'] 
         update_question.materi_id = json_object['materi_id']
         update_question.school_id = json_object['school_id']
@@ -135,4 +134,18 @@ def update_from_materi(json_object={},to_model=False):
     
     except Exception as e:
         print('error update_from_materi QuestionDB: ', e)
+        return None
+
+@db_session
+def update_count_used_by_id(json_object={}, to_model=False):
+    try:
+        update_count_used = QuestionDB[json_object['id']]
+        update_count_used.count_used = json_object['count_used']
+        commit()
+        if to_model:
+            update_count_used.to_model()
+        else:
+            return update_count_used.to_model().to_response()
+    except Exception as e:
+        print('error update_count_used_by_id: ', e)
         return None
