@@ -10,8 +10,13 @@ def portprq_auth(payload):
 
 def jwt_encode(user_info=None):
     if user_info['token'] != '':
+        # user_info['exp'] = int((datetime.utcnow() + timedelta(days=300)).timestamp())
+        # user_info['token'] = jwt.encode(user_info, secret_jwt,algorithm='HS512').decode("utf-8")
         user_info['exp'] = int((datetime.utcnow() + timedelta(days=300)).timestamp())
-        user_info['token'] = jwt.encode(user_info, secret_jwt,algorithm='HS512').encode().decode("utf-8")
+        try:
+            user_info['token'] = jwt.encode(user_info,secret_jwt,algorithm='HS512').decode("utf-8")
+        except:
+            user_info['token'] = jwt.encode(user_info, secret_jwt, algorithm='HS512')
     return user_info
 
 def check_valid_email(email=''):
