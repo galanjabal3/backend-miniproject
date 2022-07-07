@@ -1,7 +1,7 @@
 driverDB = 'mysql'
 userDB = 'admin'
 passwordDB = 'admin'
-hostDB = 'localhost'
+hostDB = '127.0.0.1'
 portDB = 3306
 dbName = 'mini_project_db'
 dbDebug = False
