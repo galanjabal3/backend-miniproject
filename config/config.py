@@ -1,8 +1,8 @@
 driverDB = 'mysql'
-userDB = 'admin'
-passwordDB = 'admin'
-hostDB = '127.0.0.1'
+userDB = 'sql6505887'
+passwordDB = 'YSt8JtniTM'
+hostDB = ' sql6.freemysqlhosting.net'
 portDB = 3306
-dbName = 'mini_project_db'
+dbName = 'sql6505887'
 dbDebug = False
 secret_jwt = 'mini_project'
