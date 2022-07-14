@@ -10,7 +10,11 @@ def find_materi_db_by_id(id=0,to_model=False):
     return materi.to_response()
 
 def get_materi_db_with_pagination(page=1, limit=9, filters=[], to_model=False):
-    return repositoriesDB.get_all_with_pagination(page=page, limit=limit, filters=filters, to_model=to_model)
+    from entitas.question.services import get_question_db_with_pagination
+    datas,_ = repositoriesDB.get_all_with_pagination(page=page, limit=limit, filters=filters, to_model=to_model)
+    for data in datas:
+        data['question'],_ = get_question_db_with_pagination(limit=0, filters=[{'field':'materi_id', 'value': data['id']}])
+    return datas,_
 
 def get_all_materi_db(to_model=False):
     return repositoriesDB.get_all(to_model=to_model)
