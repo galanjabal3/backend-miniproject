@@ -61,8 +61,9 @@ def create_question_from_materi(json_object={}, roles='', school_id=None):
 
 def update_question_from_materi(json_object={}, roles=''):
     from entitas.question.services import update_question_from_materi
-    if roles != 'ADMIN':
-        raise_error(msg='Kamu tidak admin')
+    for role in roles:
+        if role != 'ADMIN':
+            raise_error(msg='Kamu tidak admin')
     data = repositoriesDB.find_by_id(id=json_object['id'], to_model=True)
     if data is None:
         raise_error(msg='Materi Id not found')

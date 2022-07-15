@@ -79,3 +79,6 @@ def update_school_id_user_by_user_id(id=None, school_id=None, to_model=False):
     if school is None:
         raise_error(msg='School id not found')
     return repositoriesDB.update_user_school_id_by_id(id=id, school_id=school_id, to_model=to_model)
+
+def find_user_db_by_device(device='', to_model=False):
+    return repositoriesDB.find_by_device(device=device, to_model=to_model)

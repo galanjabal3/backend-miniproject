@@ -26,28 +26,32 @@ def delete_user_traffic_by_id(id=0):
     return repositoriesDB.delete_by_id(id=id)
 
 def get_traffic_global_user(json_object={}):
-    from entitas.user.repositoriesDB import insert
+    from entitas.user.repositoriesDB import insert, find_by_device
     import socket
     device = socket.gethostname()
-    visitors = repositoriesDB.get_all(to_model=True)
-    roles = []
-    roles.append("USER")
-    user = insert(json_object={
-        'username': 'guest_' + get_random_string(6),
-        'password': '',
-        'avatar': '',
-        'email': '',
-        'roles': roles,
-        'guest': True,
-        'token': str(uuid.uuid4),
-        'school_id': 0,
-        'blocked': False,
-        'device': device
-    }, to_model=True)
-    users = jwt_encode(user.to_response_login())
-    json_object['user_id'] = users['id']
-    json_object['school_id'] = 0
-    json_object['visitors'] = len(visitors) + 1
-    json_object['users'] = users
-    data = repositoriesDB.insert(json_object=json_object)
-    return data
+    user = find_by_device(device=device, to_model=True)
+    if user is None:
+        visitors = repositoriesDB.get_all(to_model=True)
+        roles = []
+        roles.append("USER")
+        user = insert(json_object={
+            'username': 'guest_' + get_random_string(6),
+            'password': '',
+            'avatar': '',
+            'email': '',
+            'roles': roles,
+            'guest': True,
+            'token': str(uuid.uuid4),
+            'school_id': 0,
+            'blocked': False,
+            'device': device
+        }, to_model=True)
+        users = jwt_encode(user.to_response_login())
+        json_object['user_id'] = users['id']
+        json_object['school_id'] = 0
+        json_object['visitors'] = len(visitors) + 1
+        json_object['users'] = users
+        data = repositoriesDB.insert(json_object=json_object)
+        return data
+    else:
+        return user.to_response()

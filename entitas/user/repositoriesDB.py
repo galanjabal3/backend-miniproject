@@ -215,3 +215,17 @@ def update_user_school_id_by_id(id=0, school_id=0, to_model=False):
     except Exception as e:
         print('error update_user_school_id_by_id: ', e)
         return None
+    
+@db_session
+def find_by_device(device='', to_model=False):
+    try:
+        data = select(s for s in UserDB if s.device == device)
+        if data.count() == 0:
+            return None
+        if to_model:
+            return data.first().to_model()
+        else:
+            return data.first().to_model()
+    except Exception as e:
+        print('error find_by_device: ', e)
+        return None
