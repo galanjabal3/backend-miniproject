@@ -17,8 +17,8 @@ def update_user_db(json_object={}):
     return repositoriesDB.update(json_object=json_object)
 
 
-def insert_user_db(json_object={}):
-    data = repositoriesDB.insert(json_object=json_object)
+def insert_user_db(json_object={}, to_model=False):
+    data = repositoriesDB.insert(json_object=json_object ,to_model=to_model)
     return data
 
 def delete_user_by_id(id=0):
@@ -28,6 +28,12 @@ def update_profile_user_db(json_object={}):
     user = repositoriesDB.find_by_id(id=json_object['id'], to_model=True)
     if user is None:
         raise_error(msg='User tidak di temukan')
+    if 'username' not in json_object:
+        json_object['username'] = user.username
+    if 'email' not in json_object:
+        json_object['email'] = user.email
+    if 'avatar' not in json_object:
+        json_object['avatar'] = user.avatar  
     return repositoriesDB.update_profile_user(json_object=json_object)
 
 def get_profile_user_db(json_object={}):

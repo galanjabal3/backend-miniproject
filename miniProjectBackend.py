@@ -61,13 +61,15 @@ api.add_route('/api/signup_admin_school/{id}', UserSignupAdminSchoolResource())
 api.add_route('/api/traffic_global_user/connect', TrafficGlobalUserConnect())
 # question-materi
 # post question-materi
-api.add_route('/api/admin/question/{school_id}', QuestionMateriAdminResource())
+api.add_route('/api/admin_school/materi/question/{school_id}', QuestionMateriAdminResource())
 # update question-materi
 api.add_route('/api/admin/question/materi/{id}', QuestionMateriUpdateResource())
 # get all question-materi
-api.add_route('/api/question/materi', MateriResource())
-# get question by id and materi_id
-api.add_route('/api/question/{id}/materi/{materi_id}', QuestionMateriResource())
+# api.add_route('/api/question/materi', MateriResource())
+api.add_route('/api/admin_school/question/materi', MateriUserResource())
+# question by id and materi_id
+api.add_route('/api/admin_school/materi/{materi_id}/question', QuestionAdminSchoolResource())
+api.add_route('/api/admin_school/materi/{materi_id}/question/{id}', QuestionAdminSchoolWithIdResource())
 # get question-materi by materi_id role user
 api.add_route('/api/question/materi/{id}/user', QuestionMateriUserResource())
 # get question-materi by materi_id role admin
@@ -77,6 +79,8 @@ api.add_route('/api/question/{id}/answer', QuestionCheckAnswerResource())
 # get user_score
 api.add_route('/api/user_score', UserScoreByUserIdResource())
 api.add_route('/api/user_score/materi/{materi_id}', UserScoreByUserIdAndMateriIdResource())
+# cek apakah user sudah pernah mengerjakan materi ini
+api.add_route('/api/user/materi/{materi_id}/checking', CheckUserAnswerFromUserResource())
 
 SWAGGERUI_URL = "/docs"
 SCHEMA_URL = "/static/openapi.yaml"

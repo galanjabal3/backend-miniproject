@@ -94,3 +94,18 @@ class QuestionCheckAnswerResource:
             base_response.message = 'Data not found'
         resp.media = base_response.toJSON()
         resp.status = base_response.status
+        
+class CheckUserAnswerFromUserResource:
+    def on_get(self, req, resp, materi_id: int):
+        base_response = BaseResponse()
+        base_response.data = services.check_user_answer_question_answer(materi_id=int(materi_id), user_id=req.context['user']['id'])
+        if base_response.data is not None:
+            base_response.status = falcon.HTTP_200
+            base_response.code = 200
+            base_response.message = 'success'
+        else:
+            base_response.status = falcon.HTTP_200
+            base_response.code = 200
+            base_response.message = 'success'
+        resp.media = base_response.toJSON()
+        resp.status = base_response.status

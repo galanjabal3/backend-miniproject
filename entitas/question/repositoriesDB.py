@@ -1,4 +1,5 @@
 import json
+from unittest import result
 from database.schema import QuestionDB
 from pony.orm import *
 
@@ -68,7 +69,6 @@ def update(json_object={},to_model=False):
         update_question.question = json_object['question']
         update_question.answer_true = json_object['answer_true']
         update_question.answer_list = json.dumps(json_object['answer_list'])
-        update_question.publish = json_object['publish'] 
         update_question.materi_id = json_object['materi_id']
         update_question.school_id = json_object['school_id']
         commit()
@@ -94,7 +94,7 @@ def insert(json_object={}, to_model=False):
             answer_true = json_object['answer_true'],
             answer_list = json.dumps(json_object['answer_list']),
             count_used = json_object['count_used'],
-            publish = json_object['publish'], 
+            publish = json_object['publish'],
             materi_id = json_object['materi_id'],
             school_id = json_object['school_id']
         )
@@ -149,3 +149,16 @@ def update_count_used_by_id(json_object={}, to_model=False):
     except Exception as e:
         print('error update_count_used_by_id: ', e)
         return None
+    
+@db_session
+def get_question_by_materi_id(materi_id=0, school_id=0, to_model=False):
+    result = []
+    try:
+        for item in select(s for s in QuestionDB if s.materi_id == materi_id and s.school_id == school_id):
+            if to_model:
+                result.append(item.to_model())
+            else:
+                result.append(item.to_model().to_response()) 
+    except Exception as e:
+        print('error get_question_by_materi_id: ', e)
+    return result

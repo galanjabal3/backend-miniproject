@@ -26,6 +26,8 @@ def get_all_with_pagination(page=1,limit=9,filters=[],to_model=False):
                 data_in_db = data_in_db.filter(id=item['value'])
             elif item['field'] == 'school_id':
                 data_in_db = data_in_db.filter(school_id=item['value'])
+            elif item['field'] == 'materi':
+                data_in_db = data_in_db.filter(lambda x: item['value'] in x.materi )
 
         data_in_db.order_by(desc(MateriDB.id))
         total_record = data_in_db.count()
@@ -80,14 +82,16 @@ def update(json_object={},to_model=False):
 
 @db_session
 def insert(json_object={}, to_model=False):
+    if 'question_total' not in json_object:
+        json_object['question_total'] = 0
     try:
         new_materi = MateriDB(
             description = json_object['description'],
             question_total = json_object['question_total'],
             teacher = json_object['teacher'],
             materi = json_object['materi'],
-            school_id = json_object['school_id'],
-            question = json.dumps(json_object['question'])
+            school_id = json_object['school_id']
+            # question = json.dumps(json_object['question'])
         )
         commit()
         if to_model:
@@ -122,3 +126,9 @@ def update_materi_question_by_id(json_object={}, to_model=False):
     except Exception as e:
         print('error update_materi_question_by_id: ', e)
         return None
+    
+@db_session
+def update_question_total(id=0, question_total=0):
+    update_question_total = MateriDB[id]
+    update_question_total.question_total = question_total
+    commit()

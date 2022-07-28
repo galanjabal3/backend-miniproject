@@ -79,11 +79,74 @@ class QuestionWithIdResource:
             base_response.message = 'Data not found'
         resp.media = base_response.toJSON()
         resp.status = base_response.status
+
+class QuestionAdminSchoolResource:
+    def on_get(self, req, resp, materi_id: int):
+        base_response = BaseResponse()
+        filters = []
+        page = int(req.get_param('page', required=False, default=1))
+        limit = int(req.get_param('limit', required=False, default=100))
+        if req.get_param('id', required=False, default='') != '':
+            filters.append({'field': 'id', 'value': req.get_param('id', required=False, default=0)})
+        filters.append({'field': 'school_id', 'value': req.context['user']['school_id']})
+        filters.append({'field': 'materi_id', 'value': int(materi_id)})       
+        base_response.data, base_response.pagination = \
+            services.get_question_db_with_pagination(page=page, limit=limit, filters=filters)
+        base_response.status = falcon.HTTP_200
+        base_response.code = 200
+        base_response.message = 'success'
+        resp.media = base_response.toJSON()
+        resp.status = base_response.status
         
-class QuestionMateriResource:
+    def on_post(self, req, resp, materi_id: int):
+        base_response = BaseResponse()
+        body = req.media
+        body['school_id'] = req.context['user']['school_id']
+        body['materi_id'] = int(materi_id)
+        base_response.data = services.insert_question_db(json_object=body)
+        base_response.status = falcon.HTTP_200
+        base_response.code = 200
+        base_response.message = 'success'
+        
+        resp.media = base_response.toJSON()
+        resp.status = base_response.status
+
+class QuestionAdminSchoolWithIdResource:
     def on_get(self, req, resp, id: int, materi_id: int):
         base_response = BaseResponse()
-        base_response.data = services.find_question_db_by_id(id=int(id), materi_id=int(materi_id))
+        base_response.data = services.find_question_db_by_id(id=int(id), materi_id=int(materi_id), school_id=req.context['user']['school_id'])
+        if base_response.data is not None:
+            base_response.status = falcon.HTTP_200
+            base_response.code = 200
+            base_response.message = 'success'
+        else:
+            base_response.status = falcon.HTTP_404
+            base_response.code = 404
+            base_response.message = 'Data not found'
+        resp.media = base_response.toJSON()
+        resp.status = base_response.status
+        
+    def on_put(self, req, resp, id: int, materi_id: int):
+        base_response = BaseResponse()
+        body = req.media
+        body['id'] = int(id)
+        body['materi_id'] = int(materi_id)
+        body['school_id'] = req.context['user']['school_id']
+        base_response.data = services.update_question_db(json_object=body, materi_id=int(materi_id), school_id=req.context['user']['school_id'])
+        if base_response.data is not None:
+            base_response.status = falcon.HTTP_200
+            base_response.code = 200
+            base_response.message = 'success'
+        else:
+            base_response.status = falcon.HTTP_404
+            base_response.code = 404
+            base_response.message = 'Data not found'
+        resp.media = base_response.toJSON()
+        resp.status = base_response.status
+    
+    def on_delete(self, req, resp, id: int,  materi_id: int):
+        base_response = BaseResponse()
+        base_response.data = services.delete_question_by_id(id=int(id), materi_id=int(materi_id), school_id=req.context['user']['school_id'])
         if base_response.data is not None:
             base_response.status = falcon.HTTP_200
             base_response.code = 200

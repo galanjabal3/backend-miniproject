@@ -225,7 +225,7 @@ def find_by_device(device='', to_model=False):
         if to_model:
             return data.first().to_model()
         else:
-            return data.first().to_model()
+            return data.first().to_model().to_response_login()
     except Exception as e:
         print('error find_by_device: ', e)
         return None

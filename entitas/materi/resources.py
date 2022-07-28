@@ -136,3 +136,22 @@ class GetQuestionMateriAdminResource:
             base_response.message = 'Data not found'
         resp.media = base_response.toJSON()
         resp.status = base_response.status
+        
+class MateriUserResource:
+    def on_get(self, req, resp):
+        base_response = BaseResponse()
+        filters = []
+        page = int(req.get_param('page', required=False, default=1))
+        limit = int(req.get_param('limit', required=False, default=100))
+        if req.get_param('id', required=False, default='') != '':
+            filters.append({'field': 'id', 'value': req.get_param('id', required=False, default=0)})
+        if req.get_param('materi', required=False, default='') != '':
+            filters.append({'field': 'materi', 'value': req.get_param('materi', required=False, default='')})
+        filters.append({'field': 'school_id', 'value': req.context['user']['school_id']})
+        base_response.data, base_response.pagination = \
+            services.get_materi_db_with_pagination(page=page, limit=limit, filters=filters)
+        base_response.status = falcon.HTTP_200
+        base_response.code = 200
+        base_response.message = 'success'
+        resp.media = base_response.toJSON()
+        resp.status = base_response.status

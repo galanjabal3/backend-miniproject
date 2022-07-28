@@ -28,6 +28,8 @@ def get_all_with_pagination(page=1,limit=9,filters=[],to_model=False):
                 data_in_db = data_in_db.filter(user_id=item['value'])
             elif item['field'] == 'school_id':
                 data_in_db = data_in_db.filter(school_id=item['value'])
+            elif item['field'] == 'materi_id':
+                data_in_db = data_in_db.filter(materi_id=item['value'])
             elif item['field'] == 'question_id':
                 data_in_db = data_in_db.filter(question_id=item['value'])
 
@@ -72,7 +74,6 @@ def update(json_object={},to_model=False):
         update_user_answer.school_id = json_object['school_id']
         update_user_answer.question_id = json_object['question_id']
         update_user_answer.materi_id = json_object['materi_id']
-        update_user_answer.questions = json.dumps(json_object['questions'])
         commit()
         if to_model:
             update_user_answer.to_model()
@@ -92,8 +93,7 @@ def insert(json_object={}, to_model=False):
             user_id = json_object['user_id'],
             school_id = json_object['school_id'],
             question_id = json_object['question_id'],
-            materi_id = json_object['materi_id'],
-            questions = json.dumps(json_object['questions'])
+            materi_id = json_object['materi_id']
         )
         commit()
         if to_model:
@@ -135,4 +135,16 @@ def get_all_by_question_id(question_id=0):
             result.append(item.to_model())
     except Exception as e:
         print('error get_all_by_question_id: ', e)
+        return None
+    
+@db_session
+def find_by_user_id_and_materi_id(user_id=0, materi_id=0, to_model=False):
+    try:
+        for item in select(s for s in UserAnswerDB if s.user_id == user_id and s.materi_id == materi_id):
+            if to_model:
+                return item.to_model()
+            else:
+                return item.to_model().to_response()
+    except Exception as e:
+        print('error find_by_user_id_and_materi_id: ', e)
         return None

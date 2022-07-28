@@ -43,13 +43,12 @@ def checking_question_answer(question_id=0, user_id=None, json_object={}):
     if user_answer is not None:
         raise_error(msg='Kamu sudah pernah menjawab question ini')
     count_used = question.count_used + 1
-    questions = update_question_count_used_by_id(json_object={'id': question_id, 'count_used': count_used}, to_model=False) 
+    update_question_count_used_by_id(json_object={'id': question_id, 'count_used': count_used}, to_model=False)
     json_object['answer'] = json_object['answer']
     json_object['user_id'] = user_id
     json_object['school_id'] = question.school_id
     json_object['question_id'] = question.id
     json_object['materi_id'] = question.materi_id
-    json_object['questions'] = questions
     count_answer_false = 0
     score = 0
     point = 0
@@ -61,24 +60,24 @@ def checking_question_answer(question_id=0, user_id=None, json_object={}):
             if json_object['answer'] != question.answer_true:
                 count_answer_false += 1
                 json_object['is_correct'] = False
-    if json_object['answer'] != item:
-        raise_error(msg='Answer not found')
-    datas = repositoriesDB.insert(json_object=json_object)  
-    materis = find_materi_db_by_id(id=datas['materi_id'], to_model=True)
+    datas = repositoriesDB.insert(json_object=json_object)
     data_question, _ = get_question_db_with_pagination(
         limit=0, 
-        filters=[{'field': 'materi_id' , 'value': datas['materi_id']}])   
-    for questionce in materis.question:
-        if questionce['id'] == datas['question_id']:
-            update_materi_question_by_id(json_object={'id': datas['materi_id'], 'question':data_question }, to_model=False)
-    score = round((100 / len(materis.question)) * (len(materis.question) - count_answer_false))
+        filters=[{'field': 'materi_id' , 'value': datas['materi_id']}]) 
+    score = round((100 / len(data_question)) * (len(data_question) - count_answer_false))
     insert_user_score_db(json_object={
         'score' : score,
         'point' : point,
         'school_id': datas['school_id'],
         'user_id' : datas['user_id'],
         'materi_id' : datas['materi_id'],
-        'count_question' : len(materis.question),
+        'count_question' : len(data_question),
         'total_question_answer' : len(question.answer_list) 
     })
     return datas
+
+def check_user_answer_question_answer(materi_id=None, user_id=None, to_model=False):
+    user = repositoriesDB.find_by_user_id_and_materi_id(user_id=user_id, materi_id=materi_id, to_model=to_model)
+    if user is not None:
+        return 'Kamu sudah pernah mengerjakan materi ini..'
+    return

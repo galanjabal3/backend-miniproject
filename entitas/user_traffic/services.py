@@ -25,16 +25,17 @@ def insert_user_traffic_db(json_object={}):
 def delete_user_traffic_by_id(id=0):
     return repositoriesDB.delete_by_id(id=id)
 
-def get_traffic_global_user(json_object={}):
-    from entitas.user.repositoriesDB import insert, find_by_device
+def get_traffic_global_user():
+    from entitas.user.services import insert_user_db, find_user_db_by_device, login_user
     import socket
+    json_object = {}
     device = socket.gethostname()
-    user = find_by_device(device=device, to_model=True)
-    if user is None:
+    user_auth = find_user_db_by_device(device=device, to_model=True)
+    if user_auth is None:
         visitors = repositoriesDB.get_all(to_model=True)
         roles = []
         roles.append("USER")
-        user = insert(json_object={
+        user = insert_user_db(json_object={
             'username': 'guest_' + get_random_string(6),
             'password': '',
             'avatar': '',
@@ -52,6 +53,6 @@ def get_traffic_global_user(json_object={}):
         json_object['visitors'] = len(visitors) + 1
         json_object['users'] = users
         data = repositoriesDB.insert(json_object=json_object)
-        return data
+        return data['users']
     else:
-        return user.to_response()
+        return jwt_encode(user_auth.to_response_login())

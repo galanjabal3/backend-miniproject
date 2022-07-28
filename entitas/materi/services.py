@@ -36,27 +36,28 @@ def create_question_from_materi(json_object={}, roles='', school_id=None):
     from entitas.school.services import find_school_db_by_id
     from entitas.question.services import insert_question_db
     for item in roles: 
-        if item != ('ADMIN' or 'ADMIN SCHOOL'):
+        if item == 'USER' or item == '':
             raise_error(msg='Kamu tidak bisa membuat question')
     school = find_school_db_by_id(id=school_id, to_model=True)
     if school is None:
         raise_error(msg='School id tidak ditemukan')
     json_object['school_id'] = school.id
-    json_object['question_total'] = len(json_object['question'])
+    if 'question' in json_object:
+        json_object['question_total'] = len(json_object['question'])
     materi = repositoriesDB.insert(json_object=json_object)
-    questions = []
-    for item in materi['question']:
-        question = insert_question_db(json_object={
-            'image': item['image'],
-            'question': item['question'],
-            'answer_true': item['answer_true'],
-            'answer_list': item['answer_list'],
-            'materi_id': materi['id'],
-            'school_id': materi['school_id']
-        }) 
-        questions.append(question)
-        materi['question'] = questions
-    repositoriesDB.update(json_object=materi)
+    # questions = []
+    # for item in materi['question']:
+    #     question = insert_question_db(json_object={
+    #         'image': item['image'],
+    #         'question': item['question'],
+    #         'answer_true': item['answer_true'],
+    #         'answer_list': item['answer_list'],
+    #         'materi_id': materi['id'],
+    #         'school_id': materi['school_id']
+    #     }) 
+    #     questions.append(question)
+    #     materi['question'] = questions
+    # repositoriesDB.update(json_object=materi)
     return materi
 
 def update_question_from_materi(json_object={}, roles=''):
@@ -97,3 +98,6 @@ def find_question_materi_from_user(id=0, to_model=False):
 
 def update_materi_question_by_id(json_object={}, to_model=False):
     return repositoriesDB.update_materi_question_by_id(json_object=json_object, to_model=to_model)
+
+def update_materi_db_question_total(id=None, question_total=None):
+    return repositoriesDB.update_question_total(id=id, question_total=question_total)
