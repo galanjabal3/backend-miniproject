@@ -48,6 +48,9 @@ api.add_route('/api/admin/guest/list', UserGuestListResource())
 # CRUD School
 api.add_route('/api/admin/school', SchoolResource())
 api.add_route('/api/admin/school/{id}', SchoolWithIdResource())
+# user school
+api.add_route('/api/user/school', SchoolResource())
+api.add_route('/api/user/school/{id}', SchoolWithIdResource())
 # update school id user
 api.add_route('/api/user/update_school/{school_id}', UpdateSchoolIdUserResource())
 # school-registration

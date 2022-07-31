@@ -236,7 +236,7 @@ class UserTrafficDB(db2.Entity):
         item.visitors = self.visitors
         item.user_id = self.user_id
         item.school_id = self.school_id
-        item.users = json.loads(self.users),
+        item.users = json.loads(self.users)
         item.create_date = self.create_date
         item.update_date = self.update_date
         return item
