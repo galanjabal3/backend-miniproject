@@ -1,1 +1,1 @@
-web:waitress-serve --bind 0.0.0.0:9931 miniProjectBackend:api
+gunicorn -b 0.0.0.0::9931 miniProjectBackend:api

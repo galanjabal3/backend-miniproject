@@ -3,5 +3,5 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-config/
+config/config.py
 config/__init__.py
