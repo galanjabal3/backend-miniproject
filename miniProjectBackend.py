@@ -34,7 +34,7 @@ api = falcon.App(cors_enable=True, middleware=[auth_middleware])
 api.req_options.auto_parse_form_urlencoded = True
 
 print('Mini Project Backend Running...')
-api.add_route('/api/echo', EchoResource())
+api.add_route('/', EchoResource())
 # login
 api.add_route('/api/login', UserLoginResource())
 # signup admin
@@ -85,17 +85,15 @@ api.add_route('/api/user_score/materi/{materi_id}', UserScoreByUserIdAndMateriId
 # cek apakah user sudah pernah mengerjakan materi ini
 api.add_route('/api/user/materi/{materi_id}/checking', CheckUserAnswerFromUserResource())
 
-SWAGGERUI_URL = "/docs"
-SCHEMA_URL = "/static/openapi.yaml"
+# SWAGGERUI_URL = "/docs"
+# SCHEMA_URL = "/static/openapi.yaml"
 # STATIC_PATH = pathlib.Path(__file__).parent / "res"
 # favicon_url = "https://falconframework.org/favicon-32x32.png"
-register_swaggerui_app(
-    api,
-    SWAGGERUI_URL,
-    SCHEMA_URL,
-    page_title="Mini Project Backend API",
-    # favicon_url=favicon_url,
-    config={
-        "supportedSubmitMethods": ["get", "post", "put", "delete", "patch"],
-    },
-)
+# register_swaggerui_app(
+#     api,
+#     page_title="Mini Project Backend API",
+#     # favicon_url=favicon_url,
+#     config={
+#         "supportedSubmitMethods": ["get", "post", "put", "delete", "patch"],
+#     },
+# )
