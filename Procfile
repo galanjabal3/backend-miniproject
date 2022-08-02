@@ -1,1 +1,1 @@
-web: waitress-serve --listen=127.0.0.1:5432 miniProjectBackend:api
+web: waitress-serve ---port:5432 miniProjectBackend:api
