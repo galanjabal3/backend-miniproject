@@ -242,4 +242,4 @@ class UserTrafficDB(db2.Entity):
         return item
 
 if db2.schema is None:
-    db2.generate_mapping(create_tables=False)
+    db2.generate_mapping(create_tables=True)

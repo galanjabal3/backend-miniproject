@@ -11,12 +11,12 @@ from entitas.question.resources import *
 from entitas.user_answer.resources import *
 from entitas.user_score.resources import *
 from falcon_swagger_ui import register_swaggerui_app
-from util.db_util import db2
+# from util.db_util import db2
 import os
 
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
-if db2.schema is None:
-    db2.generate_mapping(create_tables=False)
+# if db2.schema is None:
+    # db2.generate_mapping(create_tables=False)
     
 auth_middleware = FalconAuthMiddleware(
     JWTAuthBackend(
