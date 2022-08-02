@@ -1,1 +1,1 @@
-web: waitress-serve --listen=127.0.0.1:9931 miniProjectBackend:api
+web: gunicorn miniProjectBackend:api
