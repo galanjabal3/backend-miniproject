@@ -10,13 +10,12 @@ from entitas.materi.resources import *
 from entitas.question.resources import *
 from entitas.user_answer.resources import *
 from entitas.user_score.resources import *
-from falcon_swagger_ui import register_swaggerui_app
-# from util.db_util import db2
+from util.db_util import db2
 import os
 
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
-# if db2.schema is None:
-    # db2.generate_mapping(create_tables=False)
+if db2.schema is None:
+    db2.generate_mapping(create_tables=False)
     
 auth_middleware = FalconAuthMiddleware(
     JWTAuthBackend(
@@ -84,16 +83,3 @@ api.add_route('/api/user_score', UserScoreByUserIdResource())
 api.add_route('/api/user_score/materi/{materi_id}', UserScoreByUserIdAndMateriIdResource())
 # cek apakah user sudah pernah mengerjakan materi ini
 api.add_route('/api/user/materi/{materi_id}/checking', CheckUserAnswerFromUserResource())
-
-# SWAGGERUI_URL = "/docs"
-# SCHEMA_URL = "/static/openapi.yaml"
-# STATIC_PATH = pathlib.Path(__file__).parent / "res"
-# favicon_url = "https://falconframework.org/favicon-32x32.png"
-# register_swaggerui_app(
-#     api,
-#     page_title="Mini Project Backend API",
-#     # favicon_url=favicon_url,
-#     config={
-#         "supportedSubmitMethods": ["get", "post", "put", "delete", "patch"],
-#     },
-# )

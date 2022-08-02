@@ -1,1 +1,1 @@
-web: python miniProjectBackend.py
+web:waitress-serve --listen=0.0.0.0:9931 miniProjectBackend:api
