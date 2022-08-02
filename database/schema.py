@@ -47,7 +47,6 @@ class MateriDB(db2.Entity):
     question_total = Optional(int, nullable=True)
     teacher = Optional(str, nullable=True)
     materi = Optional(str, nullable=True)
-    question = Optional(str, 1000, nullable=True)
     create_date = Optional(datetime, nullable=True)
     update_date = Optional(datetime, nullable=True)
     
@@ -59,7 +58,6 @@ class MateriDB(db2.Entity):
         item.question_total = self.question_total
         item.teacher = self.teacher
         item.materi = self.materi
-        item.question = json.loads(self.question)
         item.create_date = self.create_date
         item.update_date = self.update_date
         return item

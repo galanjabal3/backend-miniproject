@@ -69,7 +69,6 @@ def update(json_object={},to_model=False):
         update_materi.teacher = json_object['teacher']
         update_materi.materi = json_object['materi']
         update_materi.school_id = json_object['school_id']
-        update_materi.question = json.dumps(json_object['question'])
         commit()
         if to_model:
             update_materi.to_model()
@@ -91,7 +90,6 @@ def insert(json_object={}, to_model=False):
             teacher = json_object['teacher'],
             materi = json_object['materi'],
             school_id = json_object['school_id']
-            # question = json.dumps(json_object['question'])
         )
         commit()
         if to_model:
@@ -112,20 +110,6 @@ def delete_by_id(id=None):
     except Exception as e:
         print('error deleteById MateriDB: ', e)
     return
-
-@db_session
-def update_materi_question_by_id(json_object={}, to_model=False):
-    try:
-        update_count_used = MateriDB[json_object['id']]
-        update_count_used.question = json.dumps(json_object['question'])
-        commit()
-        if to_model:
-            update_count_used.to_model()
-        else:
-            return update_count_used.to_model().to_response()
-    except Exception as e:
-        print('error update_materi_question_by_id: ', e)
-        return None
     
 @db_session
 def update_question_total(id=0, question_total=0):

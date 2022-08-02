@@ -32,7 +32,7 @@ def insert_materi_db(json_object={}):
 def delete_materi_by_id(id=0):
     return repositoriesDB.delete_by_id(id=id)
 
-def create_question_from_materi(json_object={}, roles='', school_id=None):
+def create_materi_db(json_object={}, roles='', school_id=None):
     from entitas.school.services import find_school_db_by_id
     from entitas.question.services import insert_question_db
     for item in roles: 
@@ -45,46 +45,33 @@ def create_question_from_materi(json_object={}, roles='', school_id=None):
     if 'question' in json_object:
         json_object['question_total'] = len(json_object['question'])
     materi = repositoriesDB.insert(json_object=json_object)
-    # questions = []
-    # for item in materi['question']:
-    #     question = insert_question_db(json_object={
-    #         'image': item['image'],
-    #         'question': item['question'],
-    #         'answer_true': item['answer_true'],
-    #         'answer_list': item['answer_list'],
-    #         'materi_id': materi['id'],
-    #         'school_id': materi['school_id']
-    #     }) 
-    #     questions.append(question)
-    #     materi['question'] = questions
-    # repositoriesDB.update(json_object=materi)
     return materi
 
-def update_question_from_materi(json_object={}, roles=''):
-    from entitas.question.services import update_question_from_materi
-    for role in roles:
-        if role != 'ADMIN':
-            raise_error(msg='Kamu tidak admin')
-    data = repositoriesDB.find_by_id(id=json_object['id'], to_model=True)
-    if data is None:
-        raise_error(msg='Materi Id not found')
-    json_object['question_total'] = len(json_object['question'])
-    json_object['school_id'] = data.school_id
-    materi = repositoriesDB.update(json_object=json_object)
-    questions = []
-    for item in materi['question']:
-        question = update_question_from_materi(json_object={
-            'id': item['id'],
-            'image': item['image'],
-            'question': item['question'],
-            'answer_true': item['answer_true'],
-            'answer_list': item['answer_list']
-        })
+# def update_question_from_materi(json_object={}, roles=''):
+#     from entitas.question.services import update_question_from_materi
+#     for role in roles:
+#         if role != 'ADMIN':
+#             raise_error(msg='Kamu tidak admin')
+#     data = repositoriesDB.find_by_id(id=json_object['id'], to_model=True)
+#     if data is None:
+#         raise_error(msg='Materi Id not found')
+#     json_object['question_total'] = len(json_object['question'])
+#     json_object['school_id'] = data.school_id
+#     materi = repositoriesDB.update(json_object=json_object)
+#     questions = []
+#     for item in materi['question']:
+#         question = update_question_from_materi(json_object={
+#             'id': item['id'],
+#             'image': item['image'],
+#             'question': item['question'],
+#             'answer_true': item['answer_true'],
+#             'answer_list': item['answer_list']
+#         })
         
-        questions.append(question)
-        materi['question'] = questions
-    repositoriesDB.update(json_object=materi)
-    return materi
+#         questions.append(question)
+#         materi['question'] = questions
+#     repositoriesDB.update(json_object=materi)
+#     return materi
 
 def find_question_materi_from_user(id=0, to_model=False):
     materi = repositoriesDB.find_by_id(id=id, to_model=True)
