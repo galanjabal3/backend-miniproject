@@ -1,1 +1,1 @@
-web:waitress-serve --listen=0.0.0.0:9931 miniProjectBackend:api
+web:waitress-serve --bind 0.0.0.0:9931 miniProjectBackend:api
